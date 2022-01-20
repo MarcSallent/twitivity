@@ -21,14 +21,16 @@ class Activity:
     _version: str = "1.1"
     _product: str = "account_activity"
 
-    def __init__(self, env_name, consumer_key, consumer_secret, access_token, access_token_secret):
+    def __init__(self, env_name, consumer_key, consumer_secret):
         self._auth: OAuthHandler = OAuthHandler(
                 consumer_key, consumer_secret
         )
+        self.env_name = env_name
+
+    def set_auth(self, access_token, access_token_secret):
         self._auth.set_access_token(
                 access_token, access_token_secret
         )
-        self.env_name = env_name
 
     def api(self, method: str, endpoint: str, data: dict = None) -> json:
         """
