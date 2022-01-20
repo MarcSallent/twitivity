@@ -20,12 +20,15 @@ class Activity:
     _host: str = "api.twitter.com"
     _version: str = "1.1"
     _product: str = "account_activity"
-    _auth: OAuthHandler = OAuthHandler(
-        os.environ["consumer_key"], os.environ["consumer_secret"]
-    )
-    _auth.set_access_token(
-        os.environ["access_token"], os.environ["access_token_secret"]
-    )
+
+    def __init__(self, env_name, consumer_key, consumer_secret, access_token, access_token_secret):
+        self._auth: OAuthHandler = OAuthHandler(
+                consumer_key, consumer_secret
+        )
+        self._auth.set_access_token(
+                access_token, access_token_secret
+        )
+        self.env_name = env_name
 
     def api(self, method: str, endpoint: str, data: dict = None) -> json:
         """
@@ -58,7 +61,7 @@ class Activity:
         try:
             return self.api(
                 method="POST",
-                endpoint=f"all/{os.environ['env_name']}/webhooks.json",
+                endpoint=f"all/{self.env_name}/webhooks.json",
                 data={"url": callback_url},
             ).json()
         except Exception as e:
@@ -70,7 +73,7 @@ class Activity:
         try:
             return self.api(
                 method="PUT",
-                endpoint=f"all/{os.environ['env_name']}/webhooks/{webhook_id}.json",
+                endpoint=f"all/{self.env_name}/webhooks/{webhook_id}.json",
             )
         except Exception as e:
             raise e
@@ -81,7 +84,7 @@ class Activity:
         try:
             return self.api(
                 method="DELETE",
-                endpoint=f"all/{os.environ['env_name']}/webhooks/{webhook_id}.json",
+                endpoint=f"all/{self.env_name}/webhooks/{webhook_id}.json",
             )
         except Exception as e:
             raise e
@@ -90,7 +93,7 @@ class Activity:
         try:
             return self.api(
                 method="POST",
-                endpoint=f"all/{os.environ['env_name']}/subscriptions.json",
+                endpoint=f"all/{self.env_name}/subscriptions.json",
             )
         except Exception:
             raise
@@ -134,7 +137,7 @@ class Event(ABC):
                 try:
                     if request.method == "GET" or request.method == "PUT":
                         hash_digest = hmac.digest(
-                            key=os.environ["consumer_secret"].encode("utf-8"),
+                            key=self.consumer_secret.encode("utf-8"),
                             msg=request.args.get("crc_token").encode("utf-8"),
                             digest=hashlib.sha256,
                         )
