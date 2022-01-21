@@ -7,7 +7,7 @@ DESCRIPTION: str = "Twitter Accounts Activity API Client Library for Python"
 URL: str = "https://github.com/saadmanrafat/twitivity"
 REQUIRES_PYTHON: str = ">=3.6.0"
 VERSION = "0.3.5"
-REQUIRED = ["Flask==1.1.1", "requests==2.27.0", "tweepy>=3.8.0"]
+REQUIRED = ["Flask==1.1.1", "requests==2.27.0", "tweepy==3.8.0"]
 EMAIL = "saadmanhere@gmail.com"
 
 with open(join(abspath(dirname(__file__)), "README.md"), encoding="utf-8") as f:
